@@ -29,8 +29,8 @@ def borrarBdd():
 
     mycursor = mydb.cursor()
 
-    mycursor.execute("TRUNCATE TABLE productos")
-
+    mycursor.execute("DELETE FROM productos")
+    mycursor.execute("ALTER SEQUENCE productos_num_seq RESTART WITH 1;")
     print("[SISTEMA] Base de datos vaciada")
 
 def guardarProducto(Producto):
