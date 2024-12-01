@@ -17,8 +17,11 @@ class Producto:
         self.oferta = str(oferta)
         self.imagen = str(imagen)
         self.supermercado = str(supermercado)
-        self.id = nombre + supermercado
+        self.id = nombre + supermercado + precio + oferta
 
 
     def guardarEnBdd(self):
-        AccesoBdd.guardarProducto(self)
+        try:
+            AccesoBdd.guardarProducto(self)
+        except:
+            print("[SISTEMA]: producto duplicado no se guardo: "+self.id)

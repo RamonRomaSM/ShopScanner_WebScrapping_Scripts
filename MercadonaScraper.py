@@ -1,41 +1,42 @@
-import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import json
 import Producto
-import AccesoBdd
+
 from Producto import Producto
 
 
-browser2 = webdriver.Chrome()
+
 def hacerPeticion(peticion):
-    try:
-        browser2.get(peticion)
-        productJson = browser2.find_element(By.XPATH, '/html/body/pre')
-        print(str("[PETICION ACT] " + peticion))
-        parseJsonIntoProducto(productJson.text)
-    except:
-        x=0
+    browser2 = webdriver.Chrome()
+
+    browser2.get(peticion)
+    productJson = browser2.find_element(By.XPATH, '/html/body/pre')
+    print(str("[PETICION ACT] " + peticion))
+    parseJsonIntoProducto(productJson.text)
+
+    browser2.close()
+
 def parseJsonIntoProducto (jsonAct):
-    try:
-        y = json.loads(jsonAct)
-        for x in range(0, len(y["categories"][0]["products"])):
-            nombre = y["categories"][0]["products"][x]["display_name"]
-            precio = y["categories"][0]["products"][x]["price_instructions"]["unit_price"]
-            imagen = y["categories"][0]["products"][x]["thumbnail"]
-            supermercado = "mercadona"
-            URL = y["categories"][0]["products"][x]["share_url"]
-            oferta = y["categories"][0]["products"][x]["price_instructions"]["previous_unit_price"]
-            if oferta == "null":
-                oferta = "no"
+
+    y = json.loads(jsonAct)
+    for x in range(0, len(y["categories"][0]["products"])):
+        nombre = y["categories"][0]["products"][x]["display_name"]
+        precio = y["categories"][0]["products"][x]["price_instructions"]["unit_price"]
+        imagen = y["categories"][0]["products"][x]["thumbnail"]
+        supermercado = "mercadona"
+        URL = y["categories"][0]["products"][x]["share_url"]
+        oferta = y["categories"][0]["products"][x]["price_instructions"]["previous_unit_price"]
+        if not oferta:
+            oferta = "NONE"
 
 
-            params = {'nombre': nombre, 'precio': precio, 'imagen': imagen, 'supermercado': supermercado, 'URL': URL,
-                      'oferta': oferta}
-            prod = Producto(nombre, precio, imagen, supermercado, URL, oferta)
-            prod.guardarEnBdd()
-    except:
-        x=0
+        params = {'nombre': nombre, 'precio': precio, 'imagen': imagen, 'supermercado': supermercado, 'URL': URL,
+                  'oferta': oferta}
+        prod = Producto(nombre, precio, imagen, supermercado, URL, oferta)
+        prod.guardarEnBdd()
+
+
 
 def startScraping():
     print("escrapeo")
@@ -44,4 +45,4 @@ def startScraping():
     for x in paginas:
         peticion = 'https://tienda.mercadona.es/api/categories/'+str(x)+'/?lang=es&wh=mad1'
         hacerPeticion(peticion)
-        time.sleep(4)
+
