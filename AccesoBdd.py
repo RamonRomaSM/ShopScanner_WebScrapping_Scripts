@@ -1,7 +1,7 @@
 import mysql.connector
 import psycopg2
 
-POSTGRES_URL="postgresql://localhost:5433/ShopScanner?user=Prueba&password=1234"
+POSTGRES_URL="#"
 POSTGRES_PRISMA_URL="#"
 POSTGRES_URL_NO_SSL="#"
 POSTGRES_URL_NON_POOLING="#"
